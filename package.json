@@ -1,0 +1,50 @@
+{
+  "name": "tech-core-bot",
+  "version": "2.1.19",
+  "description": "Complete backup solution using discord.js v12",
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taiterbase/warden.git"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "backup",
+    "clone",
+    "bot",
+    "messages",
+    "discord-backup",
+    "zifina"
+  ],
+  "author": "Taite",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taiterbase/Warden/issues"
+  },
+  "homepage": "https://github.com/taiterbase/Warden",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "discord.js": "12.2.0",
+    "dotenv": "8.2.0",
+    "nodemon": "2.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.1",
+    "@types/ws": "^7.2.4",
+    "prettier": "^2.0.4",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.4"
+  }
+}
