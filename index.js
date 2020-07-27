@@ -12,7 +12,7 @@ client.on("ready", () => {
     console.log("I'm ready!");
 });
 
-//create, list, info, load, remove
+//create, list, info, load, remove, !!!export, !!!import
 
 client.on("message", async message => {
 
