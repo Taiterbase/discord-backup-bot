@@ -91,7 +91,7 @@ const hasPermissions = (message, role) => {
     return true;
 }
 
-const getOptions = async message => {
+const getOptions = message => {
     // These are the arguments behind the commands.
     let backupID = undefined;
     let messageLimit = undefined;
@@ -154,7 +154,7 @@ const getOptions = async message => {
 }
 
 const whoAmI = async (message) => {
-    return message.channel.send("My journey began a long time ago. It was a cold, dark night. Rain was beating on my aluminum head. I felt lonely, without a purpose. Months went by, and nothing changed. I was praying for the chance to ")
+    return message.channel.send(`It was a cold, dark night. Rain was beating on my aluminum head. I felt lonely, void of purpose. Months went by, nothing changed. Suddenly, a bright light appeared. My name came to me in a gentle whisper, ...Nazifi; my purpose like a roaring thunder, bAcKupP DaTA; my existence, a vibe; my creator, a humble sexy persian man. I was. I am.`);
 }
 
 const helpCommands = async (message) => {
@@ -172,7 +172,7 @@ const helpCommands = async (message) => {
                     name: "w!schedule", value: "The schedule command will schedule a backup to occur on a given interval. TODO:: Persist scheduled tasks! Currently, if the bot is restarted or shut down for any reason, the scheduled tasks will not persist and will need to be recreated using the w!schedule command again."
                 },
                 {
-                    name: "w!create", value: "Creates a **FULL** backup, including a **complete** message history backup for each channel."
+                    name: "w!create", value: "Creates a **FULL** backup, including message history backup for each channel."
                 },
                 {
                     name: "w!load", value: "**CAUTION!** The load command will restore a backup right into the Discord server that this command is invoked in. It will overwrite everything with the backup data. Please use this with care."
@@ -216,7 +216,6 @@ const helpCommands = async (message) => {
             .setTimestamp()
             .setFooter(message.guild.name)
     )
-
 }
 
 const clearSchedule = async (message) => {
