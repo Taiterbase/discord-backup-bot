@@ -29,6 +29,69 @@ client.on("message", async message => {
     // If the command comes from DM return.
     if (!message.content.startsWith(settings.prefix) || message.author.bot || !message.guild) return;
 
+    // Get's the arguments of the command.
+    let options = getOptions(message);
+
+    // export sends the caller a dm containing their backups, or individual backup if an id is provided.
+
+    switch (command) {
+        case "help":
+            helpCommands(message);
+            break;
+        case "who":
+            whoAmI(message);
+            break;
+        case "export":
+            console.log("coming soon! Exports backup ID sends to user dm the backup .json file.");
+            break;
+        case "import":
+            console.log("coming soon! Imports backup file... hm");
+            break;
+        case "schedule":
+            options.clearSchedule ? clearSchedule(message) : scheduleBackup(message, options);
+            break;
+        case "create":
+            createBackup(message, options);
+            break;
+        case "load":
+            loadBackup(message, options);
+            break;
+        case "info":
+            infoBackup(message, options);
+            break;
+        case "list":
+            listBackups(message);
+            break;
+        case "remove":
+            removeBackup(message, options);
+            break;
+        case "ping":
+            message.channel.send(new Discord.MessageEmbed()
+                .setColor('#0099FF')
+                .setTitle(':information_source: Pong')
+                .setDescription(`My **ping** is **${Math.round(client.ws.ping)}ms**.`)
+            );
+            break;
+
+    }
+});
+
+const hasPermissions = (message, role) => {
+    if (!message.member.hasPermission(role)) {
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor('#0099FF')
+            .setAuthor(message.author.tag)
+            .setTitle(":x: Authentication")
+            .setDescription("You must be an administrator of this server to perform this operation.")
+            .setTimestamp()
+            .setFooter(message.guild.name)
+        );
+        return false;
+    }
+    return true;
+}
+
+const getOptions = async message => {
     // These are the arguments behind the commands.
     let backupID = undefined;
     let messageLimit = undefined;
@@ -79,7 +142,7 @@ client.on("message", async message => {
             cronSchedule = undefined;
         }
     }
-    let options = {
+    return {
         backupID,
         guildName,
         messageLimit,
@@ -88,64 +151,6 @@ client.on("message", async message => {
         jsonBeautify: false,
         clearSchedule: c > 0
     }
-    /*
-    create
-    load
-    list
-    info
-    remove
-
-    export //sends the caller a dm containing their backups, or individual backup if an id is provided.
-    */
-
-    switch (command) {
-        case "help":
-            helpCommands(message);
-            break;
-        case "who":
-            whoAmI(message);
-        case "schedule":
-            options.clearSchedule ? clearSchedule(message) : scheduleBackup(message, options);
-            break;
-        case "create":
-            createBackup(message, options);
-            break;
-        case "load":
-            loadBackup(message, options);
-            break;
-        case "info":
-            infoBackup(message, options);
-            break;
-        case "list":
-            listBackups(message);
-            break;
-        case "remove":
-            removeBackup(message, options);
-            break;
-        case "ping":
-            message.channel.send(new Discord.MessageEmbed()
-                .setColor('#0099FF')
-                .setTitle(':information_source: Pong')
-                .setDescription(`My **ping** is **${Math.round(client.ws.ping)}ms**.`)
-            );
-            break;
-
-    }
-});
-
-const hasPermissions = (message, role) => {
-    if (!message.member.hasPermission(role)) {
-        message.channel.send(new Discord.MessageEmbed()
-            .setColor('#0099FF')
-            .setAuthor(message.author.tag)
-            .setTitle(":x: Authentication")
-            .setDescription("You must be an administrator of this server to perform this operation.")
-            .setTimestamp()
-            .setFooter(message.guild.name)
-        );
-        return false;
-    }
-    return true;
 }
 
 const whoAmI = async (message) => {
