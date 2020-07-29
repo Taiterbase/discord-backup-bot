@@ -19,6 +19,7 @@ import {
     VoiceChannelData
 } from '../types';
 
+
 /**
  * Gets the permissions for a channel
  */
@@ -230,7 +231,7 @@ export async function clearGuild(guild: Guild) {
             role.delete().catch(() => { });
         });
     guild.channels.cache.forEach((channel) => {
-        channel.delete().catch((err) => { console.log("deleting channel failed,",err)});
+        channel.delete().catch((err) => { console.log("deleting channel failed,", err) });
     });
     guild.emojis.cache.forEach((emoji) => {
         emoji.delete().catch(() => { });
