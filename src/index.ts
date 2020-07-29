@@ -4,7 +4,7 @@ const master: boolean = djsVersion.split('.')[0] === '12';
 import axios from 'axios';
 import { sep } from 'path';
 
-import { existsSync, mkdirSync, readdir, statSync, unlinkSync, writeFile } from 'fs';
+import { readdirSync, lstatSync, rename, existsSync, mkdirSync, readdir, statSync, unlinkSync, writeFile } from 'fs';
 import { promisify } from 'util';
 const writeFileAsync = promisify(writeFile);
 const readdirAsync = promisify(readdir);
@@ -19,6 +19,27 @@ let backups = `${__dirname}/backups`;
 if (!existsSync(backups)) {
     mkdirSync(backups);
 }
+/**
+ * Reduces the number of backups in the backup directory to 'size'
+ * @param size number of items you want to keep in the directory by date desc.
+ * @returns True if directory was resized, false otherwise.
+ */
+export const reduceDirSize = (size: number) => {
+    const len = readdirSync(backups).length;
+    if (len > size) {
+        let files = readdirSync(backups)
+            .filter(f => lstatSync(`${backups}${sep}${f}`).isFile())
+            .map(file => ({ file, mtime: lstatSync(`${backups}${sep}${file}`).mtime }))
+            .sort((a, b) => b.mtime.getTime() - a.mtime.getTime()).slice(size, len);
+        for (const file of files) {
+            unlinkSync(`${backups}${sep}${file.file}`);
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 /**
  * Checks if a backup exists and returns its data
@@ -140,7 +161,10 @@ export const create = async (
                         ? JSON.stringify(backupData, null, 4)
                         : JSON.stringify(backupData);
                     // Save the backup
-                    await writeFileAsync(`${backups}${sep}${backupData.id}.json`, backupJSON, 'utf-8');
+                    const date = new Date(backupData.createdTimestamp);
+                    const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString();
+                    const formattedDate = `${yyyy}_${(mm[1] ? mm : "0" + mm[0])}_${(dd[1] ? dd : "0" + dd[0])}`;
+                    await writeFileAsync(`${backups}${sep}${formattedDate}__${backupData.id}.json`, backupJSON, 'utf-8');
                 }
                 // Returns ID
                 resolve(backupData);
@@ -250,5 +274,7 @@ export default {
     fetch,
     list,
     load,
-    remove
+    remove,
+    reduceDirSize,
+    setStorageFolder
 };
