@@ -72,7 +72,6 @@ client.on("message", async message => {
                 .setDescription(`My **ping** is **${Math.round(client.ws.ping)}ms**.`)
             );
             break;
-
     }
 });
 
@@ -166,51 +165,51 @@ const helpCommands = async (message) => {
             .setTitle(":information_source: Commands")
             .addFields(
                 {
-                    name: "w!who", value: "Information about the bot."
+                    name: "n!who", value: "Information about the bot."
                 },
                 {
-                    name: "w!schedule", value: "The schedule command will schedule a backup to occur on a given interval. TODO:: Persist scheduled tasks! Currently, if the bot is restarted or shut down for any reason, the scheduled tasks will not persist and will need to be recreated using the w!schedule command again."
+                    name: "n!schedule", value: "The schedule command will schedule a backup to occur on a given interval. TODO:: Persist scheduled tasks! Currently, if the bot is restarted or shut down for any reason, the scheduled tasks will not persist and will need to be recreated using the n!schedule command again."
                 },
                 {
-                    name: "w!create", value: "Creates a **FULL** backup, including message history backup for each channel."
+                    name: "n!create", value: "Creates a **FULL** backup, including message history backup for each channel."
                 },
                 {
-                    name: "w!load", value: "**CAUTION!** The load command will restore a backup right into the Discord server that this command is invoked in. It will overwrite everything with the backup data. Please use this with care."
+                    name: "n!load", value: "**CAUTION!** The load command will restore a backup right into the Discord server that this command is invoked in. It will overwrite everything with the backup data. Please use this with care."
                 },
                 {
-                    name: "w!info", value: "Gets information for a given backup ID."
+                    name: "n!info", value: "Gets information for a given backup ID."
                 },
                 {
-                    name: "w!list", value: "Lists all of your backups and scheduled backups."
+                    name: "n!list", value: "Lists all of your backups and scheduled backups."
                 },
                 {
-                    name: "w!remove", value: "Removes a backup from your backup list."
+                    name: "n!remove", value: "Removes a backup from your backup list."
                 },
                 {
-                    name: "w!ping", value: "My latency to your Discord server!"
+                    name: "n!ping", value: "My latency to your Discord server!"
                 },
                 {
                     name: "-s argument", value:
-                        "`-s` **cron expression** to specify the frequency in which you would like to backup your Discord server. e.g. `w!schedule 0 0 * * *` to backup every day at midnight. Uses bot's timezone, not your server's timezone. *`w!schedule`*"
+                        "`-s` **cron expression** to specify the frequency in which you would like to backup your Discord server. e.g. `n!schedule 0 0 * * *` to backup every day at midnight. Uses bot's timezone, not your server's timezone. *`n!schedule`*"
                 },
                 {
-                    name: "-l argument", value: "`-l` Number of messages you want to backup. Don't include for full message history backup e.g. 'w!load -l 10 -b 1234' will load the first 10 messages from the backup '1234'.*`w!create w!load w!schedule`*"
+                    name: "-l argument", value: "`-l` Number of messages you want to backup. Don't include for full message history backup e.g. 'n!load -l 10 -b 1234' will load the first 10 messages from the backup '1234'.*`n!create n!load n!schedule`*"
                 },
                 {
-                    name: "-n argument", value: "`-n` Specify the name you want the backup discord server to have when you restore it. Leave blank to use current Discord server's name. i.e. `w!schedule -s 0 0 * * * -n My Server Name` or `w!create -n My Server 2.0!`. *`w!load w!create w!schedule`*"
+                    name: "-n argument", value: "`-n` Specify the name you want the backup discord server to have when you restore it. Leave blank to use current Discord server's name. i.e. `n!schedule -s 0 0 * * * -n My Server Name` or `n!create -n My Server 2.0!`. *`n!load n!create n!schedule`*"
                 },
                 {
-                    name: "-c argument", value: "`-c` Will clear all scheduled backups for the Discord server that this command is invoked in. e.g. `w!schedule -c` will clear all scheduled backups for this server. *`w!schedule`*"
+                    name: "-c argument", value: "`-c` Will clear all scheduled backups for the Discord server that this command is invoked in. e.g. `n!schedule -c` will clear all scheduled backups for this server. *`n!schedule`*"
                 },
                 {
-                    name: "-b argument", value: "`-b` The backup ID of the backup that you wish to restore in the server. e.g. `w!load -b 1234567890` will restore backup with ID `1234567890`. *`w!remove w!info w!load`*"
+                    name: "-b argument", value: "`-b` The backup ID of the backup that you wish to restore in the server. e.g. `n!load -b 1234567890` will restore backup with ID `1234567890`. *`n!remove n!info n!load`*"
                 },
                 {
-                    name: "Examples", value: "`w!schedule -n scheduled backup -l 125 -s 30 10 */7 * *`\nSchedules a backup that will take place Every 7th day of the month at 10:30AM. All of these scheduled backups will be called 'scheduled backup', and will only maintain the most recent 125 messages for each channel in the server.\n" +
-                        "`w!create`\nCreates a full backup/clone of your Discord server, including full message history in each channel.\n" +
-                        "`w!create -l 50 -n My awesome server`\nCreates a full backup of your Discord server, including the most recent 50 messages in each channel. This server will be restored as 'My awesome server'.\n" +
-                        "`w!load -b 2020_01_01_1234567890`\nLoads a backup using all of the information in the backup file.\n" +
-                        "`w!load -b 2020_01_02_1234567891 -n Use this name instead -l 10`\nLoads data from the backup file, but uses 'Use this name instead' as the Discord server name, and only restored the most recent 10 messages in each channel from the backup file.\n"
+                    name: "Examples", value: "`n!schedule -n scheduled backup -l 125 -s 30 10 */7 * *`\nSchedules a backup that will take place Every 7th day of the month at 10:30AM. All of these scheduled backups will be called 'scheduled backup', and will only maintain the most recent 125 messages for each channel in the server.\n" +
+                        "`n!create`\nCreates a full backup/clone of your Discord server, including full message history in each channel.\n" +
+                        "`n!create -l 50 -n My awesome server`\nCreates a full backup of your Discord server, including the most recent 50 messages in each channel. This server will be restored as 'My awesome server'.\n" +
+                        "`n!load -b 2020_01_01_1234567890`\nLoads a backup using all of the information in the backup file.\n" +
+                        "`n!load -b 2020_01_02_1234567891 -n Use this name instead -l 10`\nLoads data from the backup file, but uses 'Use this name instead' as the Discord server name, and only restored the most recent 10 messages in each channel from the backup file.\n"
                 }
             )
             .setTimestamp()
@@ -317,7 +316,7 @@ const createBackup = async (message, options) => {
                 .setColor('#ff00ff')
                 .setAuthor(message.author.tag)
                 .setTitle(":white_check_mark: Backup")
-                .setDescription(options.cronSchedule ? "Scheduled backup complete. Use w!list to view your backups." : "Backup successful. Use w!list to view your backups.")
+                .setDescription(options.cronSchedule ? "Scheduled backup complete. Use n!list to view your backups." : "Backup successful. Use n!list to view your backups.")
                 .setTimestamp()
                 .setFooter(message.guild.name)
             ); //dm
@@ -333,7 +332,7 @@ const loadBackup = async (message, options) => {
             .setColor('#ff00ff')
             .setAuthor(message.author.tag)
             .setTitle(":x: Load Backup")
-            .setDescription("You must specify a valid backup ID.\ne.g. `w!load -b 1234567890`")
+            .setDescription("You must specify a valid backup ID.\ne.g. `n!load -b 1234567890`")
             .setTimestamp()
             .setFooter(message.guild.name)
         );
@@ -366,7 +365,7 @@ const loadBackup = async (message, options) => {
                 .setFooter(message.guild.name)
             );
             // Load the backup
-            backup.load(backupID, message.guild, { clearGuildBeforeRestore: true, messageLimit: options.messageLimit, guildName: options.guildName }).then(() => {
+            backup.load(options.backupID, message.guild, { clearGuildBeforeRestore: true, messageLimit: options.messageLimit, guildName: options.guildName }).then(() => {
                 // When the backup is loaded, delete them from the server
                 //backup.remove(backupID);
             }).catch((err) => {
@@ -414,7 +413,7 @@ const infoBackup = async (message, options) => {
             .setColor('#ff00ff')
             .setAuthor(message.author.tag)
             .setTitle(":x: Information")
-            .setDescription("You must specify a valid backup ID.\ne.g. `w!info -b 1234567890`")
+            .setDescription("You must specify a valid backup ID.\ne.g. `n!info -b 1234567890`")
             .setTimestamp()
             .setFooter(message.guild.name)
         );
@@ -493,7 +492,7 @@ const removeBackup = async (message, options) => {
             .setColor('#ff00ff')
             .setAuthor(message.author.tag)
             .setTitle(":x: Load Backup")
-            .setDescription("You must specify a valid backup ID.\ne.g. `w!remove -b 1234567890`")
+            .setDescription("You must specify a valid backup ID.\ne.g. `n!remove -b 1234567890`")
             .setTimestamp()
             .setFooter(message.guild.name)
         );
