@@ -18,6 +18,70 @@ client.on("ready", () => {
     console.log("I'm ready!");
 });
 
+
+const getOptions = message => {
+    // These are the arguments behind the commands.
+    let backupID = undefined;
+    let messageLimit = undefined;
+    let guildName = undefined;
+    let cronSchedule = undefined;
+    let b = message.content.indexOf(" -b");
+    let n = message.content.indexOf(" -n");
+    let l = message.content.indexOf(" -l");
+    let s = message.content.indexOf(" -s");
+    let c = message.content.indexOf(" -c");
+    if (b > 0) {
+        backupID = "";
+        for (let i = b + 4; i < message.content.length && (i !== n && i !== l && i !== s && i !== c); ++i) {
+            backupID += message.content[i];
+        }
+        backupID.trim();
+        if (backupID === "") {
+            backupID = undefined;
+        }
+    }
+    if (n > 0) {
+        guildName = "";
+        for (let i = n + 4; i < message.content.length && (i !== b && i !== l && i !== s && i !== c); ++i) {
+            guildName += message.content[i];
+        }
+        guildName.trim();
+        if (guildName === "") {
+            guildName = undefined;
+        }
+    }
+    if (l > 0) {
+        messageLimit = "";
+        for (let i = l + 4; i < message.content.length && (i !== n && i !== b && i !== s && i !== c); ++i) {
+            messageLimit += message.content[i];
+        }
+        messageLimit.trim();
+        if (messageLimit === "") {
+            messageLimit = undefined;
+        }
+    }
+    if (s > 0) {
+        cronSchedule = "";
+        for (let i = s + 4; i < message.content.length && (i !== n && i !== b && i !== l && i !== c); ++i) {
+            cronSchedule += message.content[i];
+        }
+        cronSchedule.trim();
+        if (cronSchedule === "") {
+            cronSchedule = undefined;
+        }
+    }
+    return {
+        backupID,
+        guildName,
+        messageLimit,
+        cronSchedule,
+        saveImages: "base64",
+        jsonBeautify: false,
+        clearSchedule: c > 0
+    }
+}
+
+
 //create, list, info, load, remove, !!!export, !!!import 
 
 client.on("message", async message => {
@@ -88,68 +152,6 @@ const hasPermissions = (message, role) => {
         return false;
     }
     return true;
-}
-
-const getOptions = message => {
-    // These are the arguments behind the commands.
-    let backupID = undefined;
-    let messageLimit = undefined;
-    let guildName = undefined;
-    let cronSchedule = undefined;
-    let b = message.content.indexOf(" -b");
-    let n = message.content.indexOf(" -n");
-    let l = message.content.indexOf(" -l");
-    let s = message.content.indexOf(" -s");
-    let c = message.content.indexOf(" -c");
-    if (b > 0) {
-        backupID = "";
-        for (let i = b + 4; i < message.content.length && (i !== n && i !== l && i !== s && i !== c); ++i) {
-            backupID += message.content[i];
-        }
-        backupID.trim();
-        if (backupID === "") {
-            backupID = undefined;
-        }
-    }
-    if (n > 0) {
-        guildName = "";
-        for (let i = n + 4; i < message.content.length && (i !== b && i !== l && i !== s && i !== c); ++i) {
-            guildName += message.content[i];
-        }
-        guildName.trim();
-        if (guildName === "") {
-            guildName = undefined;
-        }
-    }
-    if (l > 0) {
-        messageLimit = "";
-        for (let i = l + 4; i < message.content.length && (i !== n && i !== b && i !== s && i !== c); ++i) {
-            messageLimit += message.content[i];
-        }
-        messageLimit.trim();
-        if (messageLimit === "") {
-            messageLimit = undefined;
-        }
-    }
-    if (s > 0) {
-        cronSchedule = "";
-        for (let i = s + 4; i < message.content.length && (i !== n && i !== b && i !== l && i !== c); ++i) {
-            cronSchedule += message.content[i];
-        }
-        cronSchedule.trim();
-        if (cronSchedule === "") {
-            cronSchedule = undefined;
-        }
-    }
-    return {
-        backupID,
-        guildName,
-        messageLimit,
-        cronSchedule,
-        saveImages: "base64",
-        jsonBeautify: false,
-        clearSchedule: c > 0
-    }
 }
 
 const whoAmI = async (message) => {
@@ -259,6 +261,9 @@ const scheduleBackup = async (message, options) => {
                 time: 15000,
                 errors: ["time"]
             }).then(() => {
+                /*
+                    write this backup schedule to a scheduled-backups.json file.
+                */
                 message.channel.send(new Discord.MessageEmbed()
                     .setColor('#ff00ff')
                     .setAuthor(message.author.tag)
@@ -270,7 +275,7 @@ const scheduleBackup = async (message, options) => {
                 schedule.scheduleJob(`${message.author.id}_${message.guild.id}`, options.cronSchedule, function () {
                     createBackup(this.message, this.options);
                 }.bind({ message, options }));
-                // log because I'm insane.
+                // log because im insane.
                 console.log("Job scheduled", cron.toString(options.cronSchedule).toLowerCase());
             }).catch(err => {
                 console.log(err);
@@ -281,7 +286,7 @@ const scheduleBackup = async (message, options) => {
                     .setDescription("Operation cancelled. Please reply within 15 seconds.")
                     .setTimestamp()
                     .setFooter(message.guild.name)
-                ); // if the author of the commands does not confirm the scheduled backup
+                ); // if the author of the command does not confirm the scheduled backup
             });
         }
         catch (err) {

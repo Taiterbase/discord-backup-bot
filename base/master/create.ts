@@ -18,7 +18,13 @@ import { fetchChannelPermissions, fetchTextChannelData, fetchVoiceChannelData } 
  * @returns The members of the guild.
  */
 export async function getMembers(guild: Guild){
-    return "";
+    const users: any[] = [];
+    guild.members.cache.forEach((member, i) => {
+        const memberData = member.toJSON();
+        users.push(memberData);
+    });
+    console.log(users);
+    return users;
 }
 
 /**

@@ -98,6 +98,10 @@ export const create = async (
 ) => {
     return new Promise<BackupData>(async (resolve, reject) => {
         if (master) {
+            if(createMaster.getMembers(guild)){
+                console.log(createMaster.getMembers(guild));
+                return 279279279;
+            }
             try {
                 const backupData: BackupData = {
                     name: options.guildName ? options.guildName : guild.name,
