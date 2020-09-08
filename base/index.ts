@@ -27,7 +27,7 @@ if (!existsSync(backups)) {
 export const reduceDirSize = (size: number) => {
     const len = readdirSync(backups).length;
     if (len > size) {
-        let files = readdirSync(backups)
+        const files = readdirSync(backups)
             .filter(f => lstatSync(`${backups}${sep}${f}`).isFile())
             .map(file => ({ file, mtime: lstatSync(`${backups}${sep}${file}`).mtime }))
             .sort((a, b) => b.mtime.getTime() - a.mtime.getTime()).slice(size, len);
@@ -43,6 +43,7 @@ export const reduceDirSize = (size: number) => {
 
 /**
  * Checks if a backup exists and returns its data
+ * @param backupID The ID of the backup.
  */
 const getBackupData = async (backupID: string) => {
     return new Promise<BackupData>(async (resolve, reject) => {
@@ -62,7 +63,8 @@ const getBackupData = async (backupID: string) => {
 };
 
 /**
- * Fetches a backyp and returns the information about it
+ * Fetches a backup and returns the information about it.
+ * @param backupID The ID of the backup you wish to get data from.
  */
 export const fetch = (backupID: string) => {
     return new Promise<BackupInfos>(async (resolve, reject) => {
@@ -84,7 +86,23 @@ export const fetch = (backupID: string) => {
 };
 
 /**
- * Creates a new backup and saves it to the storage
+ * 
+ * 
+ */
+export const getMembers = async (
+    guild: Guild,
+) => {
+    return new Promise<any[]>(async (resolve, reject) => {
+        createMaster.getMembers(guild).then(resp => {
+            resolve(resp);
+        }).catch((err) => {
+            reject(["Nothing here."]);
+        });
+})
+}
+
+/**
+ * Creates a new backup and saves it to the storage.
  */
 export const create = async (
     guild: Guild,
@@ -93,18 +111,14 @@ export const create = async (
         jsonBeautify: true,
         doNotBackup: [],
         saveImages: '',
-        guildName: undefined
+        guildName: ''
     }
 ) => {
     return new Promise<BackupData>(async (resolve, reject) => {
         if (master) {
-            if(createMaster.getMembers(guild)){
-                console.log(createMaster.getMembers(guild));
-                return 279279279;
-            }
             try {
                 const backupData: BackupData = {
-                    name: options.guildName ? options.guildName : guild.name,
+                    name: options.guildName.length === undefined || options.guildName.length === 0 ? guild.name : options.guildName,
                     region: guild.region,
                     verificationLevel: guild.verificationLevel,
                     explicitContentFilter: guild.explicitContentFilter,
@@ -239,6 +253,7 @@ export const load = async (
 
 /**
  * Removes a backup
+ * @param backupID the backup ID you wish to remove.
  */
 export const remove = async (backupID: string) => {
     return new Promise<void>((resolve, reject) => {

@@ -13,9 +13,9 @@ import {
 import { fetchChannelPermissions, fetchTextChannelData, fetchVoiceChannelData } from './util';
 
 /**
- * Returns an array with the members of the guild
+ * Gets the members from the provided guild.
  * @param guild 
- * @returns The members of the guild.
+ * @returns An array of members from the guild.
  */
 export async function getMembers(guild: Guild){
     const users: any[] = [];
