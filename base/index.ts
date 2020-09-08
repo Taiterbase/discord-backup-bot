@@ -93,7 +93,7 @@ export const getMembers = async (
     guild: Guild,
 ) => {
     return new Promise<any[]>(async (resolve, reject) => {
-        createMaster.getMembers(guild).then(resp => {
+        utilMaster.getMembers(guild).then(resp => {
             resolve(resp);
         }).catch((err) => {
             reject(["Nothing here."]);
@@ -180,7 +180,9 @@ export const create = async (
                         : JSON.stringify(backupData);
                     // Save the backup
                     const date = new Date(backupData.createdTimestamp);
-                    const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString();
+                    const yyyy = date.getFullYear().toString();
+                    const mm = (date.getMonth() + 1).toString(); 
+                    const dd = date.getDate().toString();
                     const formattedDate = `${yyyy}_${(mm[1] ? mm : "0" + mm[0])}_${(dd[1] ? dd : "0" + dd[0])}`;
                     await writeFileAsync(`${backups}${sep}${formattedDate}__${backupData.id}.json`, backupJSON, 'utf-8');
                 }

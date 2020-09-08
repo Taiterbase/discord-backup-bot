@@ -99,6 +99,9 @@ client.on("message", async message => {
     // export sends the caller a dm containing their backups, or individual backup if an id is provided.
 
     switch (command) {
+        case "members":
+            getMembers(message);
+            break;
         case "help":
             helpCommands(message);
             break;
@@ -139,15 +142,16 @@ client.on("message", async message => {
     }
 });
 
+
 const hasPermissions = (message, role) => {
     if (!message.member.hasPermission(role)) {
         message.channel.send(new Discord.MessageEmbed()
-            .setColor('#0099FF')
-            .setAuthor(message.author.tag)
-            .setTitle(":x: Authentication")
-            .setDescription("You must be an administrator of this server to perform this operation.")
-            .setTimestamp()
-            .setFooter(message.guild.name)
+        .setColor('#0099FF')
+        .setAuthor(message.author.tag)
+        .setTitle(":x: Authentication")
+        .setDescription("You must be an administrator of this server to perform this operation.")
+        .setTimestamp()
+        .setFooter(message.guild.name)
         );
         return false;
     }
@@ -162,40 +166,40 @@ const helpCommands = async (message) => {
     if (!hasPermissions(message, 'ADMINISTRATOR')) return;
     return message.channel.send(
         new Discord.MessageEmbed()
-            .setColor('#FFFFFF')
-            .setAuthor(message.author.tag)
-            .setTitle(":information_source: Commands")
-            .addFields(
-                {
-                    name: "n!who", value: "Information about the bot."
-                },
-                {
-                    name: "n!schedule", value: "The schedule command will schedule a backup to occur on a given interval. TODO:: Persist scheduled tasks! Currently, if the bot is restarted or shut down for any reason, the scheduled tasks will not persist and will need to be recreated using the n!schedule command again."
-                },
-                {
-                    name: "n!create", value: "Creates a **FULL** backup, including message history backup for each channel."
-                },
-                {
-                    name: "n!load", value: "**CAUTION!** The load command will restore a backup right into the Discord server that this command is invoked in. It will overwrite everything with the backup data. Please use this with care."
-                },
-                {
-                    name: "n!info", value: "Gets information for a given backup ID."
-                },
-                {
-                    name: "n!list", value: "Lists all of your backups and scheduled backups."
-                },
-                {
-                    name: "n!remove", value: "Removes a backup from your backup list."
-                },
-                {
-                    name: "n!ping", value: "My latency to your Discord server!"
-                },
-                {
-                    name: "-s argument", value:
-                        "`-s` **cron expression** to specify the frequency in which you would like to backup your Discord server. e.g. `n!schedule 0 0 * * *` to backup every day at midnight. Uses bot's timezone, not your server's timezone. *`n!schedule`*"
-                },
-                {
-                    name: "-l argument", value: "`-l` Number of messages you want to backup. Don't include for full message history backup e.g. 'n!load -l 10 -b 1234' will load the first 10 messages from the backup '1234'.*`n!create n!load n!schedule`*"
+        .setColor('#FFFFFF')
+        .setAuthor(message.author.tag)
+        .setTitle(":information_source: Commands")
+        .addFields(
+            {
+                name: "n!who", value: "Information about the bot."
+            },
+            {
+                name: "n!schedule", value: "The schedule command will schedule a backup to occur on a given interval. TODO:: Persist scheduled tasks! Currently, if the bot is restarted or shut down for any reason, the scheduled tasks will not persist and will need to be recreated using the n!schedule command again."
+            },
+            {
+                name: "n!create", value: "Creates a **FULL** backup, including message history backup for each channel."
+            },
+            {
+                name: "n!load", value: "**CAUTION!** The load command will restore a backup right into the Discord server that this command is invoked in. It will overwrite everything with the backup data. Please use this with care."
+            },
+            {
+                name: "n!info", value: "Gets information for a given backup ID."
+            },
+            {
+                name: "n!list", value: "Lists all of your backups and scheduled backups."
+            },
+            {
+                name: "n!remove", value: "Removes a backup from your backup list."
+            },
+            {
+                name: "n!ping", value: "My latency to your Discord server!"
+            },
+            {
+                name: "-s argument", value:
+                "`-s` **cron expression** to specify the frequency in which you would like to backup your Discord server. e.g. `n!schedule 0 0 * * *` to backup every day at midnight. Uses bot's timezone, not your server's timezone. *`n!schedule`*"
+            },
+            {
+                name: "-l argument", value: "`-l` Number of messages you want to backup. Don't include for full message history backup e.g. 'n!load -l 10 -b 1234' will load the first 10 messages from the backup '1234'.*`n!create n!load n!schedule`*"
                 },
                 {
                     name: "-n argument", value: "`-n` Specify the name you want the backup discord server to have when you restore it. Leave blank to use current Discord server's name. i.e. `n!schedule -s 0 0 * * * -n My Server Name` or `n!create -n My Server 2.0!`. *`n!load n!create n!schedule`*"
@@ -212,18 +216,18 @@ const helpCommands = async (message) => {
                         "`n!create -l 50 -n My awesome server`\nCreates a full backup of your Discord server, including the most recent 50 messages in each channel. This server will be restored as 'My awesome server'.\n" +
                         "`n!load -b 2020_01_01_1234567890`\nLoads a backup using all of the information in the backup file.\n" +
                         "`n!load -b 2020_01_02_1234567891 -n Use this name instead -l 10`\nLoads data from the backup file, but uses 'Use this name instead' as the Discord server name, and only restored the most recent 10 messages in each channel from the backup file.\n"
-                }
+                    }
             )
             .setTimestamp()
             .setFooter(message.guild.name)
-    )
-}
+            )
+        }
 
-const clearSchedule = async (message) => {
-    if (!hasPermissions(message, 'ADMINISTRATOR')) return;
-    if (schedule.cancelJob(schedule.scheduledJobs[`${message.author.id}_${message.guild.id}`])) {
+        const clearSchedule = async (message) => {
+            if (!hasPermissions(message, 'ADMINISTRATOR')) return;
+            if (schedule.cancelJob(schedule.scheduledJobs[`${message.author.id}_${message.guild.id}`])) {
         return message.channel.send(new Discord.MessageEmbed()
-            .setColor('#ff00ff')
+        .setColor('#ff00ff')
             .setAuthor(message.author.tag)
             .setTitle(":white_check_mark: Clear Scheduled Backup")
             .setDescription("Cleared scheduled backup for this Discord server.")
@@ -242,18 +246,27 @@ const clearSchedule = async (message) => {
     }
 }
 
+const getMembers = (message) => {
+    backup.getMembers(message.guild).then(resp => {
+        console.log(resp);
+    }).catch(err => {
+        console.log(err);
+    })
+    return message.channel.send(":ok:");
+}
+
 const scheduleBackup = async (message, options) => {
     if (!hasPermissions(message, 'ADMINISTRATOR')) return;
-
+    
     if (options.cronSchedule !== "") {
         try {
             console.log("Scheduling backup", cron.toString(options.cronSchedule).toLowerCase());
             message.channel.send(new Discord.MessageEmbed()
-                .setColor('#ff00ff')
-                .setAuthor(message.author.tag)
-                .setTitle(":warning: Schedule Backup")
-                .setDescription("Scheduling a backup `" + cron.toString(options.cronSchedule).toLowerCase() + "`. Type `-confirm` to continue.")
-                .setTimestamp()
+            .setColor('#ff00ff')
+            .setAuthor(message.author.tag)
+            .setTitle(":warning: Schedule Backup")
+            .setDescription("Scheduling a backup `" + cron.toString(options.cronSchedule).toLowerCase() + "`. Type `-confirm` to continue.")
+            .setTimestamp()
                 .setFooter(message.guild.name)
             );
             await message.channel.awaitMessages(m => (m.author.id === message.author.id) && (m.content === "-confirm"), {

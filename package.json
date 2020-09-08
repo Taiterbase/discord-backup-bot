@@ -12,7 +12,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "dev": "pm2 start index.js --name \"TC Discord Bot\" --max-memory-restart 100M",
-    "monitor": "pm2 monit 0",
+    "monit": "pm2 monit 0",
+    "res": "pm2 restart 0",
     "stop": "pm2 delete 0"
   },
   "repository": {

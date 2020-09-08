@@ -21,6 +21,21 @@ import {
 
 
 /**
+ * Gets the members from the provided guild.
+ * @param guild 
+ * @returns An array of members from the guild.
+ */
+export async function getMembers(guild: Guild){
+    const users: any[] = [];
+    guild.members.cache.forEach((member, i) => {
+        const memberData = member.toJSON();
+        users.push(memberData);
+    });
+    return users;
+}
+
+
+/**
  * Gets the permissions for a channel
  */
 export function fetchChannelPermissions(channel: TextChannel | VoiceChannel | CategoryChannel) {
@@ -75,7 +90,7 @@ export async function fetchTextChannelData(channel: TextChannel, options: Create
             messages: []
         };
         /* Fetch channel messages */
-        let msglimit = isNaN(options.messageLimit) ? -1 : options.messageLimit;
+        const msglimit = isNaN(options.messageLimit) ? -1 : options.messageLimit;
         const fetchOptions: ChannelLogsQueryOptions = { limit: 100 };
         let lastMessageId: Snowflake;
         let fetchComplete: boolean = false;
@@ -200,15 +215,15 @@ export async function loadChannel(
                             messages = messages.slice(messages.length - options.messageLimit);
                         }
                         for (const msg of messages) {
-                            let msgcon = msg.content + "\t*" + msg.date + "*";
+                            const msgcon = msg.content + "\t*" + msg.date + "*";
                             const sentMsg = await webhook.send(msgcon, {
                                 username: msg.username,
                                 avatarURL: msg.avatar,
                                 embeds: msg.embeds,
                                 files: msg.files,
                                 timestamp: msg.timestamp,
-                            }).catch((err) => {
-                                console.log(err.message);
+                            }).catch(() => {
+                                resolve(channel);
                             });
                             if (msg.pinned && sentMsg) await sentMsg.pin();
                         }
@@ -231,7 +246,7 @@ export async function clearGuild(guild: Guild) {
             role.delete().catch(() => { });
         });
     guild.channels.cache.forEach((channel) => {
-        channel.delete().catch((err) => { console.log("deleting channel failed,", err) });
+        channel.delete().catch(() => { });
     });
     guild.emojis.cache.forEach((emoji) => {
         emoji.delete().catch(() => { });

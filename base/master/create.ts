@@ -12,20 +12,6 @@ import {
 } from '../types';
 import { fetchChannelPermissions, fetchTextChannelData, fetchVoiceChannelData } from './util';
 
-/**
- * Gets the members from the provided guild.
- * @param guild 
- * @returns An array of members from the guild.
- */
-export async function getMembers(guild: Guild){
-    const users: any[] = [];
-    guild.members.cache.forEach((member, i) => {
-        const memberData = member.toJSON();
-        users.push(memberData);
-    });
-    console.log(users);
-    return users;
-}
 
 /**
  * Returns an array with the banned members of the guild
