@@ -1,8 +1,8 @@
-# nazifi-bot
+# nZifi
 This uses discord.js and the discord-backup framework. Thank you to both of these projects for making this one possible.  
 ## Restored things
 
-Here are all things that can be restored with `nazifi-bot`:  
+Here are all things that can be restored with `nZifi`:  
 
 * Server icon  
 * Server banner  
@@ -18,13 +18,8 @@ Here are all things that can be restored with `nazifi-bot`:
 * Server channels (with permissions, type, nsfw, messages, etc...)  
 * Server roles (with permissions, color, etc...)
 
-Example of things that can't be restored:
-
-* Server logs  
-* Server invitations  
-* Server vanity url
-
-Things to come:
+  
+Things on the to-do list:
 
 * User roles
 * User assignments
