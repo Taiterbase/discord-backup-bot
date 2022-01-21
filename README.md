@@ -4,6 +4,7 @@ This uses discord.js and the discord-backup framework. Thank you to both of thes
 
 Here are all things that can be restored with `nZifi`:  
 
+* All messages
 * Server icon  
 * Server banner  
 * Server region  
