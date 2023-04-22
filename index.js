@@ -93,10 +93,10 @@ client.on("message", async message => {
     // If the command comes from DM return.
     if (!message.content.startsWith(settings.prefix) || message.author.bot || !message.guild) return;
 
-    // Get's the arguments of the command.
+    // Gets the arguments of the command.
     let options = getOptions(message);
 
-    // export sends the caller a dm containing their backups, or individual backup if an id is provided.
+    // Export sends the caller a dm containing their backups, or individual backup if an id is provided.
 
     switch (command) {
         case "members":
